@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { usePropertyContext } from "@/contexts/PropertyContext";
 
-const AddPropertyModal: React.FC = () => {
+const AddPropertyModal: React.FC<any> = ({ callback }) => {
   const { addProperty, isModalOpen, setModalOpen } = usePropertyContext();
   const [title, setTitle] = useState("");
   const [location, setLocation] = useState("");
@@ -60,6 +60,7 @@ const AddPropertyModal: React.FC = () => {
 
     addProperty(newProperty);
     savePropertyToLocalStorage(newProperty);
+    callback && callback();
     onClose();
   };
 

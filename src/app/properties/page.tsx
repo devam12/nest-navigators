@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Modal from "@/components/Modal"; // Assuming you have a Modal component for displaying details
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import DeleteIcon from "@mui/icons-material/Delete"; // Import the delete icon
 
 interface Property {
   id: number;
@@ -34,6 +35,14 @@ const Page = () => {
     setProperties(propertiesFromLocalStorage);
   };
 
+  const deleteProperty = (propertyId: number) => {
+    const updatedProperties = properties.filter(
+      (property) => property.id !== propertyId
+    );
+    setProperties(updatedProperties);
+    localStorage.setItem("properties", JSON.stringify(updatedProperties));
+  };
+
   const openPropertyModal = (property: Property) => {
     setSelectedProperty(property);
   };
@@ -47,7 +56,7 @@ const Page = () => {
       <section className="py-2 bg-black ">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {properties.map((property: any, index: any) => (
+            {properties.map((property: Property, index: number) => (
               <div
                 key={property.id}
                 className="bg-black rounded-lg shadow-md overflow-hidden text-white border"
@@ -75,7 +84,13 @@ const Page = () => {
                     >
                       More Details
                     </button>
-                    <FavoriteIcon className="text-red-600 self-center" />
+                    <div className="flex items-center">
+                      <FavoriteIcon className="text-red-600 self-center" />
+                      <DeleteIcon
+                        onClick={() => deleteProperty(property.id)}
+                        className="text-red-600 cursor-pointer ml-2 self-center"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -112,7 +127,7 @@ const Page = () => {
       )}
 
       {/* Add Property Modal */}
-      <AddPropertyModal />
+      <AddPropertyModal callback={fetchPropertiesFromLocalStorage} />
     </>
   );
 };
