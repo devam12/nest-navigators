@@ -17,11 +17,15 @@ interface Property {
   sellerName: string;
   sellerContact: string;
   liked?: boolean;
+  views: number;
+  inquiries: number;
 }
 
 const Page = () => {
   const [properties, setProperties] = useState<Property[]>([]);
-  const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
+  const [selectedProperty, setSelectedProperty] = useState<Property | null>(
+    null
+  );
 
   useEffect(() => {
     fetchPropertiesFromLocalStorage();
@@ -31,7 +35,17 @@ const Page = () => {
     const propertiesFromLocalStorage = JSON.parse(
       localStorage.getItem("properties") || "[]"
     );
-    setProperties(propertiesFromLocalStorage);
+
+    const initializedProperties = propertiesFromLocalStorage.map(
+      (property: Property) => ({
+        ...property,
+        views: property.views || 0,
+        inquiries: property.inquiries || 0,
+      })
+    );
+
+    setProperties(initializedProperties);
+    localStorage.setItem("properties", JSON.stringify(initializedProperties));
   };
 
   const updateLocalStorage = (updatedProperties: Property[]) => {
@@ -56,11 +70,24 @@ const Page = () => {
   };
 
   const openPropertyModal = (property: Property) => {
+    const updatedProperties = properties.map((p) =>
+      p.id === property.id ? { ...p, views: p.views + 1 } : p
+    );
+    updateLocalStorage(updatedProperties); // Save updated views in localStorage
     setSelectedProperty(property);
   };
 
   const closePropertyModal = () => {
     setSelectedProperty(null);
+  };
+
+  const incrementInquiries = (propertyId: number) => {
+    const updatedProperties = properties.map((property) =>
+      property.id === propertyId
+        ? { ...property, inquiries: property.inquiries + 1 }
+        : property
+    );
+    updateLocalStorage(updatedProperties); // Save updated inquiries in localStorage
   };
 
   // Separate liked and unliked properties
@@ -81,7 +108,9 @@ const Page = () => {
               {/* Liked Properties Section */}
               {likedProperties.length > 0 && (
                 <div>
-                  <h2 className="text-2xl font-bold text-white mb-4">Liked Properties</h2>
+                  <h2 className="text-2xl font-bold text-white mb-4">
+                    Liked Properties
+                  </h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
                     {likedProperties.map((property) => (
                       <div
@@ -90,7 +119,9 @@ const Page = () => {
                       >
                         <div className="relative h-48 w-full">
                           <Image
-                            src={`/properties/image${property.id % 6 + 1}.jpg`}
+                            src={`/properties/image${
+                              (property.id % 6) + 1
+                            }.jpg`}
                             alt={property.title}
                             layout="fill"
                             objectFit="cover"
@@ -104,6 +135,16 @@ const Page = () => {
                           <p className="text-lg font-bold text-blue-600 mt-2">
                             ₹{parseFloat(property.price).toFixed(2)}
                           </p>
+                          <div className="flex justify-between">
+                          <p className="mt-2">
+                            <span className="font-semibold">Views : </span>
+                            {property.views}
+                          </p>
+                          <p className="mt-2">
+                            <span className="font-semibold">Inquiries : </span>
+                            {property.inquiries}
+                          </p>
+                        </div>
                           <div className="text-center flex align-baseline justify-between">
                             <button
                               onClick={() => openPropertyModal(property)}
@@ -131,7 +172,9 @@ const Page = () => {
 
               {/* Unliked Properties Section */}
               <div>
-                <h2 className="text-2xl font-bold text-white mb-4">All Properties</h2>
+                <h2 className="text-2xl font-bold text-white mb-4">
+                  All Properties
+                </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                   {unlikedProperties.map((property) => (
                     <div
@@ -140,7 +183,7 @@ const Page = () => {
                     >
                       <div className="relative h-48 w-full">
                         <Image
-                          src={`/properties/image${property.id % 6 + 1}.jpg`}
+                          src={`/properties/image${(property.id % 6) + 1}.jpg`}
                           alt={property.title}
                           layout="fill"
                           objectFit="cover"
@@ -154,6 +197,17 @@ const Page = () => {
                         <p className="text-lg font-bold text-blue-600 mt-2">
                           ₹{parseFloat(property.price).toFixed(2)}
                         </p>
+                        <div className="flex justify-between">
+                          <p className="mt-2">
+                            <span className="font-semibold">Views : </span>
+                            {property.views}
+                          </p>
+                          <p className="mt-2">
+                            <span className="font-semibold">Inquiries : </span>
+                            {property.inquiries}
+                          </p>
+                        </div>
+
                         <div className="text-center flex align-baseline justify-between">
                           <button
                             onClick={() => openPropertyModal(property)}
@@ -164,7 +218,9 @@ const Page = () => {
                           <div className="flex items-center">
                             <FavoriteIcon
                               className={`${
-                                property.liked ? "text-red-600" : "text-gray-400"
+                                property.liked
+                                  ? "text-red-600"
+                                  : "text-gray-400"
                               } cursor-pointer`}
                               onClick={() => toggleLike(property.id)}
                             />
@@ -206,12 +262,28 @@ const Page = () => {
             </ul>
             <p className="font-semibold mt-4">Seller Details:</p>
             <p>Name: {selectedProperty.sellerName}</p>
-            <p>Contact: {selectedProperty.sellerContact}</p>
+            <div className="flex justify-between mt-4">
+              <button
+                className="bg-blue-500 text-white px-4 py-2 rounded"
+                onClick={() => {
+                  incrementInquiries(selectedProperty.id);
+                  closePropertyModal();
+                }}
+              >
+                Inquire
+              </button>
+              <button className="text-gray-500" onClick={closePropertyModal}>
+                Close
+              </button>
+            </div>
           </div>
         </Modal>
       )}
 
-      <AddPropertyModal callback={fetchPropertiesFromLocalStorage} />
+      {/* Add Property Button */}
+      <div className="fixed bottom-5 right-5">
+        <AddPropertyModal />
+      </div>
     </>
   );
 };
