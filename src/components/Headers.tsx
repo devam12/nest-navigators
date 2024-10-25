@@ -14,12 +14,17 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import { useRouter } from "next/navigation";
-// import { Search } from "@mui/icons-material";
-import { alpha, Modal, styled } from "@mui/material";
+import { alpha, styled } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import InputBase from "@mui/material/InputBase";
 import Image from "next/image";
 import { usePropertyContext } from "@/contexts/PropertyContext";
+import {
+  Select,
+  FormControl,
+  InputLabel,
+  MenuItem as SelectMenuItem,
+} from "@mui/material";
 
 const pages = [
   { name: "Home", url: "/home" },
@@ -38,6 +43,10 @@ function Header() {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
+
+  // State for the selected filter option and search query
+  const [filter, setFilter] = React.useState("location");
+  const [searchQuery, setSearchQuery] = React.useState("");
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -59,6 +68,12 @@ function Header() {
     router.push(url); // Navigate and close the menu
   };
 
+  const handleSearch = () => {
+    // Implement your search logic here based on filter and searchQuery
+    console.log(`Searching for ${searchQuery} with filter: ${filter}`);
+    // Example: navigateTo(`/properties?${filter}=${searchQuery}`);
+  };
+
   const Search = styled("div")(({ theme }) => ({
     position: "relative",
     borderRadius: theme.shape.borderRadius,
@@ -75,8 +90,26 @@ function Header() {
     },
   }));
 
+  const CustomSelect = styled(Select)(({ theme }) => ({
+    color: "white",
+    backgroundColor: theme.palette.grey[900], // Dark background color
+    borderColor: "white",
+    "& .MuiOutlinedInput-notchedOutline": {
+      borderColor: "white",
+    },
+    "& .MuiSelect-select": {
+      padding: theme.spacing(1), // Smaller padding as requested
+    },
+    "&:hover .MuiOutlinedInput-notchedOutline": {
+      borderColor: theme.palette.primary.light, // Lighter color on hover
+    },
+    "& .MuiSvgIcon-root": {
+      color: "white", // White color for the dropdown icon
+    },
+  }));
+
   const SearchIconWrapper = styled("div")(({ theme }) => ({
-    padding: theme.spacing(0, 2),
+    padding: theme.spacing(0, 3),
     height: "100%",
     position: "absolute",
     pointerEvents: "none",
@@ -161,55 +194,41 @@ function Header() {
           ))}
         </Box>
 
+        <CustomSelect
+          labelId="filter-select-label"
+          value={filter}
+          onChange={(e: any) => setFilter(e.target.value)}
+          sx={{ color: "white", borderColor: "red", padding: 0 }}
+        >
+          <SelectMenuItem value="location">Location</SelectMenuItem>
+          <SelectMenuItem value="price">Price</SelectMenuItem>
+          <SelectMenuItem value="propertyType">Property Type</SelectMenuItem>
+        </CustomSelect>
+
         <Search>
           <SearchIconWrapper>
             <SearchIcon />
           </SearchIconWrapper>
+
           <StyledInputBase
             placeholder="Search…"
             inputProps={{ "aria-label": "search" }}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") handleSearch(); // Trigger search on Enter key
+            }}
           />
         </Search>
 
         <a
-          // href="#"
           onClick={() => setModalOpen(true)}
-          className="inline-flex items-center justify-center px-5 py-2 mr-3 text-base font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800  focus:ring-primary-200 dark:focus:ring-primary-900"
+          className="inline-flex items-center justify-center px-5 py-2 mr-3 text-base font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-primary-200 dark:focus:ring-primary-900"
         >
           List Your Property
         </a>
 
-        {/* <Box sx={{ flexGrow: 0, marginRight:2 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: "45px" }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography sx={{ textAlign: "center" }}>
-                    {setting}
-                  </Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box> */}
+        {/* User menu functionality commented out */}
       </Toolbar>
     </AppBar>
   );

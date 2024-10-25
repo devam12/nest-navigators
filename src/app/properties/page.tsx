@@ -136,15 +136,17 @@ const Page = () => {
                             ₹{parseFloat(property.price).toFixed(2)}
                           </p>
                           <div className="flex justify-between">
-                          <p className="mt-2">
-                            <span className="font-semibold">Views : </span>
-                            {property.views}
-                          </p>
-                          <p className="mt-2">
-                            <span className="font-semibold">Inquiries : </span>
-                            {property.inquiries}
-                          </p>
-                        </div>
+                            <p className="mt-2">
+                              <span className="font-semibold">Views : </span>
+                              {property.views}
+                            </p>
+                            <p className="mt-2">
+                              <span className="font-semibold">
+                                Inquiries :{" "}
+                              </span>
+                              {property.inquiries}
+                            </p>
+                          </div>
                           <div className="text-center flex align-baseline justify-between">
                             <button
                               onClick={() => openPropertyModal(property)}
@@ -261,19 +263,18 @@ const Page = () => {
               ))}
             </ul>
             <p className="font-semibold mt-4">Seller Details:</p>
-            <p>Name: {selectedProperty.sellerName}</p>
-            <div className="flex justify-between mt-4">
+            <div className="flex justify-between align-center">
+              <p className="flex align-center text-center">
+                Name: {selectedProperty.sellerName}
+              </p>
               <button
-                className="bg-blue-500 text-white px-4 py-2 rounded"
+                className="bg-blue-500 text-white px-1 py-1 rounded"
                 onClick={() => {
                   incrementInquiries(selectedProperty.id);
                   closePropertyModal();
                 }}
               >
                 Inquire
-              </button>
-              <button className="text-gray-500" onClick={closePropertyModal}>
-                Close
               </button>
             </div>
           </div>
