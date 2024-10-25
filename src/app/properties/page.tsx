@@ -1,75 +1,60 @@
 "use client";
 import AddPropertyModal from "@/components/AddPropertyModal";
-import { usePropertyContext } from "@/contexts/PropertyContext";
-import { NextPage } from "next";
+import { useState, useEffect } from "react";
 import Image from "next/image";
+import Modal from "@/components/Modal"; // Assuming you have a Modal component for displaying details
+import FavoriteIcon from "@mui/icons-material/Favorite";
 
-interface Props {
+interface Property {
   id: number;
+  imageUrl: string;
+  price: string;
+  title: string;
+  features: string[];
+  location: string;
+  propertyType?: string;
+  sellerName: string;
+  sellerContact: string;
 }
 
-const Page: NextPage<Props> = ({}) => {
-  // const { properties } = usePropertyContext();
-  const properties = [
-    {
-      id: 1,
-      imageUrl: "/properties/image1.jpg",
-      price: "$350,000",
-      title: "Modern Family Home",
-      features: ["4 Beds", "3 Baths", "2,500 sq ft"],
-      location: "Ahmedabad",
-    },
-    {
-      id: 2,
-      imageUrl: "/properties/image2.jpg",
-      price: "$450,000",
-      title: "Luxury Villa with Pool",
-      features: ["5 Beds", "4 Baths", "3,000 sq ft"],
-    },
-    {
-      id: 3,
-      imageUrl: "/properties/image3.jpg",
-      price: "$275,000",
-      title: "Cozy Urban Apartment",
-      features: ["2 Beds", "1 Bath", "1,200 sq ft"],
-    },
-    {
-      id: 4,
-      imageUrl: "/properties/image4.jpg",
-      price: "$275,000",
-      title: "Cozy Urban Apartment",
-      features: ["2 Beds", "1 Bath", "1,200 sq ft"],
-    },
-    {
-      id: 5,
-      imageUrl: "/properties/image5.jpg",
-      price: "$275,000",
-      title: "Cozy Urban Apartment",
-      features: ["2 Beds", "1 Bath", "1,200 sq ft"],
-    },
-    {
-      id: 6,
-      imageUrl: "/properties/image6.jpg",
-      price: "$275,000",
-      title: "Cozy Urban Apartment",
-      features: ["2 Beds", "1 Bath", "1,200 sq ft"],
-    },
-    // Add more properties as needed
-  ];
+const Page = () => {
+  const [properties, setProperties] = useState<Property[]>([]);
+  const [selectedProperty, setSelectedProperty] = useState<Property | null>(
+    null
+  );
+
+  useEffect(() => {
+    fetchPropertiesFromLocalStorage();
+  }, []);
+
+  const fetchPropertiesFromLocalStorage = () => {
+    const propertiesFromLocalStorage = JSON.parse(
+      localStorage.getItem("properties") || "[]"
+    );
+    setProperties(propertiesFromLocalStorage);
+  };
+
+  const openPropertyModal = (property: Property) => {
+    setSelectedProperty(property);
+  };
+
+  const closePropertyModal = () => {
+    setSelectedProperty(null);
+  };
 
   return (
     <>
-      <section className="py-2 bg-black">
+      <section className="py-2 bg-black ">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {properties.map((property: any) => (
+            {properties.map((property: any, index: any) => (
               <div
                 key={property.id}
                 className="bg-black rounded-lg shadow-md overflow-hidden text-white border"
               >
                 <div className="relative h-48 w-full">
                   <Image
-                    src={property.imageUrl}
+                    src={`/properties/image${(index % 6) + 1}.jpg`}
                     alt={property.title}
                     layout="fill"
                     objectFit="cover"
@@ -81,26 +66,16 @@ const Page: NextPage<Props> = ({}) => {
                     {property.title}
                   </h3>
                   <p className="text-lg font-bold text-blue-600 mt-2">
-                    {property.price}
+                    ₹{parseFloat(property.price).toFixed(2)}
                   </p>
-                  {/*<ul className="text-white mt-3 space-y-1">
-                    {property.features.map((feature: any, index: any) => (
-                      <li key={index} className="flex items-center">
-                        <span className="inline-block w-2 h-2 mr-2 bg-white rounded-full"></span>
-                        {feature}
-                      </li>
-                    ))}
-                  </ul> */}
-                  <div className="flex justify-between mt-6">
-                    <button className="text-white border border-white rounded-lg px-3 py-1 hover:bg-primary-800 hover:text-white transition">
-                      View Details
+                  <div className="text-center flex align-baseline justify-between">
+                    <button
+                      onClick={() => openPropertyModal(property)}
+                      className="text-white mt-3 border border-white rounded-lg px-3 py-1 hover:bg-primary-800 hover:text-white transition"
+                    >
+                      More Details
                     </button>
-                    <button className="text-white border border-white rounded-lg px-3 py-1 hover:bg-primary-800 hover:text-white transition">
-                      Contact Seller
-                    </button>
-                    <button className="text-white border border-white rounded-lg px-3 py-1 hover:bg-primary-800 hover:text-white transition">
-                      Schedule Visit
-                    </button>
+                    <FavoriteIcon className="text-red-600 self-center" />
                   </div>
                 </div>
               </div>
@@ -108,7 +83,36 @@ const Page: NextPage<Props> = ({}) => {
           </div>
         </div>
       </section>
-      <AddPropertyModal></AddPropertyModal>
+
+      {/* Property Info Modal */}
+      {selectedProperty && (
+        <Modal isOpen={true} onClose={closePropertyModal}>
+          <div className="p-4">
+            <h2 className="text-xl font-semibold mb-2">
+              {selectedProperty.title}
+            </h2>
+            <p className="text-lg font-bold text-blue-600 mb-2">
+              {selectedProperty.price}
+            </p>
+            <p className="mb-1">Location: {selectedProperty.location}</p>
+            <p className="mb-1">Type: {selectedProperty.propertyType}</p>
+            <ul className="mb-2">
+              {selectedProperty.features.map((feature, index) => (
+                <li key={index} className="flex items-center">
+                  <span className="inline-block w-2 h-2 mr-2 bg-gray-700 rounded-full"></span>
+                  {feature}
+                </li>
+              ))}
+            </ul>
+            <p className="font-semibold mt-4">Seller Details:</p>
+            <p>Name: {selectedProperty.sellerName}</p>
+            <p>Contact: {selectedProperty.sellerContact}</p>
+          </div>
+        </Modal>
+      )}
+
+      {/* Add Property Modal */}
+      <AddPropertyModal />
     </>
   );
 };

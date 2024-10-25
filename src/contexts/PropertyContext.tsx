@@ -17,7 +17,7 @@ interface PropertyContextProps {
   properties: Property[];
   addProperty: (property: Omit<Property, "id" | "inquiries" | "views">) => void;
   isModalOpen: boolean;
-  setModalOpen: (boolean: boolean) => void;
+  setModalOpen: (isOpen: boolean) => void;
 }
 
 const PropertyContext = createContext<PropertyContextProps | undefined>(
@@ -53,9 +53,10 @@ export const PropertyProvider = ({ children }: { children: ReactNode }) => {
 
 export const usePropertyContext = () => {
   const context = useContext(PropertyContext);
-  if (!context)
+  if (!context) {
     throw new Error(
       "usePropertyContext must be used within a PropertyProvider"
     );
+  }
   return context;
 };
