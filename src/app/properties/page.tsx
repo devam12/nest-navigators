@@ -2,9 +2,9 @@
 import AddPropertyModal from "@/components/AddPropertyModal";
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import Modal from "@/components/Modal"; // Assuming you have a Modal component for displaying details
+import Modal from "@/components/Modal";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import DeleteIcon from "@mui/icons-material/Delete"; // Import the delete icon
+import DeleteIcon from "@mui/icons-material/Delete";
 
 interface Property {
   id: number;
@@ -16,13 +16,12 @@ interface Property {
   propertyType?: string;
   sellerName: string;
   sellerContact: string;
+  liked?: boolean;
 }
 
 const Page = () => {
   const [properties, setProperties] = useState<Property[]>([]);
-  const [selectedProperty, setSelectedProperty] = useState<Property | null>(
-    null
-  );
+  const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
 
   useEffect(() => {
     fetchPropertiesFromLocalStorage();
@@ -35,12 +34,25 @@ const Page = () => {
     setProperties(propertiesFromLocalStorage);
   };
 
+  const updateLocalStorage = (updatedProperties: Property[]) => {
+    setProperties(updatedProperties);
+    localStorage.setItem("properties", JSON.stringify(updatedProperties));
+  };
+
   const deleteProperty = (propertyId: number) => {
     const updatedProperties = properties.filter(
       (property) => property.id !== propertyId
     );
-    setProperties(updatedProperties);
-    localStorage.setItem("properties", JSON.stringify(updatedProperties));
+    updateLocalStorage(updatedProperties);
+  };
+
+  const toggleLike = (propertyId: number) => {
+    const updatedProperties = properties.map((property) =>
+      property.id === propertyId
+        ? { ...property, liked: !property.liked }
+        : property
+    );
+    updateLocalStorage(updatedProperties);
   };
 
   const openPropertyModal = (property: Property) => {
@@ -51,51 +63,124 @@ const Page = () => {
     setSelectedProperty(null);
   };
 
+  // Separate liked and unliked properties
+  const likedProperties = properties.filter((property) => property.liked);
+  const unlikedProperties = properties.filter((property) => !property.liked);
+
   return (
     <>
       <section className="py-2 bg-black ">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {properties.map((property: Property, index: number) => (
-              <div
-                key={property.id}
-                className="bg-black rounded-lg shadow-md overflow-hidden text-white border"
-              >
-                <div className="relative h-48 w-full">
-                  <Image
-                    src={`/properties/image${(index % 6) + 1}.jpg`}
-                    alt={property.title}
-                    layout="fill"
-                    objectFit="cover"
-                    className="hover:scale-105 transition-transform duration-200"
-                  />
-                </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-semibold text-white">
-                    {property.title}
-                  </h3>
-                  <p className="text-lg font-bold text-blue-600 mt-2">
-                    ₹{parseFloat(property.price).toFixed(2)}
-                  </p>
-                  <div className="text-center flex align-baseline justify-between">
-                    <button
-                      onClick={() => openPropertyModal(property)}
-                      className="text-white mt-3 border border-white rounded-lg px-3 py-1 hover:bg-primary-800 hover:text-white transition"
-                    >
-                      More Details
-                    </button>
-                    <div className="flex items-center">
-                      <FavoriteIcon className="text-red-600 self-center" />
-                      <DeleteIcon
-                        onClick={() => deleteProperty(property.id)}
-                        className="text-red-600 cursor-pointer ml-2 self-center"
-                      />
-                    </div>
+          {/* Display message if no properties */}
+          {properties.length === 0 ? (
+            <h1 className="text-2xl font-bold text-white text-center py-10">
+              No Properties Available
+            </h1>
+          ) : (
+            <>
+              {/* Liked Properties Section */}
+              {likedProperties.length > 0 && (
+                <div>
+                  <h2 className="text-2xl font-bold text-white mb-4">Liked Properties</h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
+                    {likedProperties.map((property) => (
+                      <div
+                        key={property.id}
+                        className="bg-black rounded-lg shadow-md overflow-hidden text-white border"
+                      >
+                        <div className="relative h-48 w-full">
+                          <Image
+                            src={`/properties/image${property.id % 6 + 1}.jpg`}
+                            alt={property.title}
+                            layout="fill"
+                            objectFit="cover"
+                            className="hover:scale-105 transition-transform duration-200"
+                          />
+                        </div>
+                        <div className="p-6">
+                          <h3 className="text-xl font-semibold text-white">
+                            {property.title}
+                          </h3>
+                          <p className="text-lg font-bold text-blue-600 mt-2">
+                            ₹{parseFloat(property.price).toFixed(2)}
+                          </p>
+                          <div className="text-center flex align-baseline justify-between">
+                            <button
+                              onClick={() => openPropertyModal(property)}
+                              className="text-white mt-3 border border-white rounded-lg px-3 py-1 hover:bg-primary-800 hover:text-white transition"
+                            >
+                              More Details
+                            </button>
+                            <div className="flex items-center">
+                              <FavoriteIcon
+                                className="text-red-600 cursor-pointer"
+                                onClick={() => toggleLike(property.id)}
+                              />
+                              <DeleteIcon
+                                onClick={() => deleteProperty(property.id)}
+                                className="text-red-600 cursor-pointer ml-2 self-center"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
+              )}
+
+              {/* Unliked Properties Section */}
+              <div>
+                <h2 className="text-2xl font-bold text-white mb-4">All Properties</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {unlikedProperties.map((property) => (
+                    <div
+                      key={property.id}
+                      className="bg-black rounded-lg shadow-md overflow-hidden text-white border"
+                    >
+                      <div className="relative h-48 w-full">
+                        <Image
+                          src={`/properties/image${property.id % 6 + 1}.jpg`}
+                          alt={property.title}
+                          layout="fill"
+                          objectFit="cover"
+                          className="hover:scale-105 transition-transform duration-200"
+                        />
+                      </div>
+                      <div className="p-6">
+                        <h3 className="text-xl font-semibold text-white">
+                          {property.title}
+                        </h3>
+                        <p className="text-lg font-bold text-blue-600 mt-2">
+                          ₹{parseFloat(property.price).toFixed(2)}
+                        </p>
+                        <div className="text-center flex align-baseline justify-between">
+                          <button
+                            onClick={() => openPropertyModal(property)}
+                            className="text-white mt-3 border border-white rounded-lg px-3 py-1 hover:bg-primary-800 hover:text-white transition"
+                          >
+                            More Details
+                          </button>
+                          <div className="flex items-center">
+                            <FavoriteIcon
+                              className={`${
+                                property.liked ? "text-red-600" : "text-gray-400"
+                              } cursor-pointer`}
+                              onClick={() => toggleLike(property.id)}
+                            />
+                            <DeleteIcon
+                              onClick={() => deleteProperty(property.id)}
+                              className="text-red-600 cursor-pointer ml-2 self-center"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
-            ))}
-          </div>
+            </>
+          )}
         </div>
       </section>
 
@@ -126,7 +211,6 @@ const Page = () => {
         </Modal>
       )}
 
-      {/* Add Property Modal */}
       <AddPropertyModal callback={fetchPropertiesFromLocalStorage} />
     </>
   );

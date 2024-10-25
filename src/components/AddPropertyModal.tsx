@@ -9,8 +9,8 @@ const AddPropertyModal: React.FC<any> = ({ callback }) => {
   const [price, setPrice] = useState("");
   const [propertyType, setPropertyType] = useState("");
   const [features, setFeatures] = useState("");
-  const [sellerName, setSellerName] = useState(""); // New state for seller's name
-  const [contactDetails, setContactDetails] = useState(""); // New state for contact details
+  const [sellerName, setSellerName] = useState("");
+  const [sellerContact, setSellerContact] = useState("");
   const [error, setError] = useState("");
 
   const onClose = () => {
@@ -19,10 +19,9 @@ const AddPropertyModal: React.FC<any> = ({ callback }) => {
   };
 
   const handleAddProperty = () => {
-    // Reset error before validation
     setError("");
 
-    // Validate fields
+    // Basic validation
     if (
       !title ||
       !location ||
@@ -30,32 +29,66 @@ const AddPropertyModal: React.FC<any> = ({ callback }) => {
       !propertyType ||
       !features ||
       !sellerName ||
-      !contactDetails
+      !sellerContact
     ) {
       setError("All fields are required.");
       return;
     }
 
+    // Minimum character length validation
+    if (title.length < 3) {
+      setError("Title must be at least 3 characters.");
+      return;
+    }
+    if (location.length < 3) {
+      setError("Location must be at least 3 characters.");
+      return;
+    }
+    if (propertyType.length < 3) {
+      setError("Property type must be at least 3 characters.");
+      return;
+    }
+    if (features.length < 3) {
+      setError("Features must be at least 3 characters.");
+      return;
+    }
+
+    // Price validation
     const numericPrice = parseFloat(price);
     if (isNaN(numericPrice) || numericPrice <= 0) {
       setError("Please enter a valid price.");
       return;
     }
 
+    // Features validation
     const featuresArray = features.split(",").map((feature) => feature.trim());
     if (featuresArray.length === 0 || featuresArray.some((f) => f === "")) {
       setError("Features must be comma-separated.");
       return;
     }
 
+    // Seller name validation - letters only
+    const namePattern = /^[A-Za-z\s]+$/;
+    if (!namePattern.test(sellerName)) {
+      setError("Seller name should contain only letters.");
+      return;
+    }
+
+    // Contact number validation - 10-digit number
+    const contactPattern = /^\d{10}$/;
+    if (!contactPattern.test(sellerContact)) {
+      setError("Contact details should be a 10-digit number.");
+      return;
+    }
+
     const newProperty = {
       title,
       location,
-      price: numericPrice.toString(), // Store price as a string
+      price: numericPrice.toString(),
       propertyType,
       features: featuresArray,
       sellerName,
-      contactDetails,
+      sellerContact,
     };
 
     addProperty(newProperty);
@@ -70,7 +103,7 @@ const AddPropertyModal: React.FC<any> = ({ callback }) => {
     );
     const updatedProperties = [
       ...propertiesFromLocalStorage,
-      { ...property, id: Date.now(), inquiries: 0, views: 0 }, // add unique ID, inquiries, and views
+      { ...property, id: Date.now(), inquiries: 0, views: 0 },
     ];
     localStorage.setItem("properties", JSON.stringify(updatedProperties));
   };
@@ -81,9 +114,9 @@ const AddPropertyModal: React.FC<any> = ({ callback }) => {
     setPrice("");
     setPropertyType("");
     setFeatures("");
-    setSellerName(""); // Reset seller's name
-    setContactDetails(""); // Reset contact details
-    setError(""); // Reset error message
+    setSellerName("");
+    setSellerContact("");
+    setError("");
   };
 
   useEffect(() => {
@@ -98,8 +131,7 @@ const AddPropertyModal: React.FC<any> = ({ callback }) => {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center text-black">
       <div className="bg-white p-6 rounded-md w-full max-w-md">
         <h3 className="text-lg font-semibold mb-4">List Your Property</h3>
-        {error && <p className="text-red-500 mb-4">{error}</p>}{" "}
-        {/* Display error message */}
+        {error && <p className="text-red-500 mb-4">{error}</p>}
         <input
           type="text"
           placeholder="Title"
@@ -145,8 +177,8 @@ const AddPropertyModal: React.FC<any> = ({ callback }) => {
         <input
           type="text"
           placeholder="Contact Details"
-          value={contactDetails}
-          onChange={(e) => setContactDetails(e.target.value)}
+          value={sellerContact}
+          onChange={(e) => setSellerContact(e.target.value)}
           className="w-full border border-gray-300 p-2 mb-3 rounded"
         />
         <div className="flex justify-between">

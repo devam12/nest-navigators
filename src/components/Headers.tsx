@@ -100,7 +100,7 @@ function Header() {
   }));
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" className="border-b">
       <Toolbar
         disableGutters
         className="dark:bg-gray-900"
