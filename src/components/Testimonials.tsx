@@ -74,7 +74,7 @@ const testimonialsData: Testimonial[] = [
 // Testimonials component
 const Testimonials: React.FC = () => {
   return (
-    <div className="max-w-6xl mx-auto  bg-black rounded-lg shadow-md p-6 border border-gray-600">
+    <div className="max-w-6xl mx-auto  bg-black rounded-lg shadow-md   border-gray-600 mb-6">
       <h2 className="text-2xl font-bold text-center text-white mb-6">
         What Our Clients Say
       </h2>

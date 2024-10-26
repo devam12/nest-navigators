@@ -5,9 +5,9 @@ import Image from "next/image";
 const HeroBanner: NextPage = ({}) => {
   return (
     <section className="bg-cover bg-center bg-no-repeat bg-[url('/path-to-your-image.jpg')] ">
-      <div className="bg-black/50 grid max-w-screen-xl px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12">
-        <div className="mr-auto place-self-center lg:col-span-7 text-white">
-          <h1 className="font-bold max-w-2xl mb-10 text-4xl leading-none md:text-5xl xl:text-6xl">
+      <div className="bg-black/50 grid max-w-screen-xl px-4 py-4 mx-auto lg:gap-8 xl:gap-0 lg:py-10 lg:grid-cols-12">
+        <div className="mr-auto place-self-center lg:col-span-7 text-white ">
+          <h1 className="font-bold max-w-2xl mb-6 text-4xl leading-none md:text-5xl xl:text-6xl">
             Discover Your Dream Home in Srikakulam
           </h1>
           <p className="max-w-2xl mb-10 font-light text-gray-200 lg:mb-8 md:text-lg lg:text-xl dark:text-gray-300">
@@ -32,9 +32,6 @@ const HeroBanner: NextPage = ({}) => {
               ></path>
             </svg>
           </a>
-        </div>
-        <div className="hidden lg:mt-0 lg:col-span-5 lg:flex">
-          {/* Add more images or a carousel here if desired */}
         </div>
       </div>
     </section>
