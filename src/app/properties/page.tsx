@@ -1,10 +1,11 @@
 "use client";
 import AddPropertyModal from "@/components/AddPropertyModal";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Image from "next/image";
 import Modal from "@/components/Modal";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useFilterContext } from "@/contexts/FilterContext";
 
 interface Property {
   id: number;
@@ -26,6 +27,47 @@ const Page = () => {
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(
     null
   );
+
+  const { filterType, searchValue } = useFilterContext();
+  const likedProperties = properties.filter((property) => property.liked);
+  const unlikedProperties = properties.filter((property) => !property.liked);
+
+  const updatedList = useMemo(() => {
+    if (!searchValue) {
+      return unlikedProperties;
+    }
+
+    const lowerCaseSearchValue = searchValue.toLowerCase();
+
+    return unlikedProperties.filter((property) => {
+      if (filterType === "location") {
+        return property.location.toLowerCase().includes(lowerCaseSearchValue);
+      }
+
+      if (filterType === "pricelt") {
+        const price = parseFloat(property.price);
+        const searchPrice = parseFloat(lowerCaseSearchValue);
+        return !isNaN(price) && !isNaN(searchPrice) && price <= searchPrice;
+      }
+
+      if (filterType === "priceht") {
+        const price = parseFloat(property.price);
+        const searchPrice = parseFloat(lowerCaseSearchValue);
+        return !isNaN(price) && !isNaN(searchPrice) && price >= searchPrice;
+      }
+
+      if (
+        filterType === "propertyType" &&
+        property.propertyType !== undefined
+      ) {
+        return property.propertyType
+          .toLowerCase()
+          .includes(lowerCaseSearchValue);
+      }
+
+      return false;
+    });
+  }, [properties, searchValue, filterType, unlikedProperties]);
 
   useEffect(() => {
     fetchPropertiesFromLocalStorage();
@@ -73,7 +115,7 @@ const Page = () => {
     const updatedProperties = properties.map((p) =>
       p.id === property.id ? { ...p, views: p.views + 1 } : p
     );
-    updateLocalStorage(updatedProperties); // Save updated views in localStorage
+    updateLocalStorage(updatedProperties);
     setSelectedProperty(property);
   };
 
@@ -87,25 +129,19 @@ const Page = () => {
         ? { ...property, inquiries: property.inquiries + 1 }
         : property
     );
-    updateLocalStorage(updatedProperties); // Save updated inquiries in localStorage
+    updateLocalStorage(updatedProperties);
   };
-
-  // Separate liked and unliked properties
-  const likedProperties = properties.filter((property) => property.liked);
-  const unlikedProperties = properties.filter((property) => !property.liked);
 
   return (
     <>
       <section className="py-2 bg-black ">
         <div className="container mx-auto px-4">
-          {/* Display message if no properties */}
           {properties.length === 0 ? (
             <h1 className="text-2xl font-bold text-white text-center py-10">
               No Properties Available
             </h1>
           ) : (
             <>
-              {/* Liked Properties Section */}
               {likedProperties.length > 0 && (
                 <div>
                   <h2 className="text-2xl font-bold text-white mb-4">
@@ -178,7 +214,7 @@ const Page = () => {
                   All Properties
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                  {unlikedProperties.map((property) => (
+                  {updatedList.map((property) => (
                     <div
                       key={property.id}
                       className="bg-black rounded-lg shadow-md overflow-hidden text-white border"

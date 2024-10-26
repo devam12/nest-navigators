@@ -4,6 +4,7 @@ import "./globals.css";
 import Headers from "@/components/Headers";
 import { Box } from "@mui/material";
 import { PropertyProvider } from "@/contexts/PropertyContext";
+import { FilterProvider } from "@/contexts/FilterContext";
 
 // const geistSans = localFont({
 //   src: "./fonts/GeistVF.woff",
@@ -30,12 +31,14 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <PropertyProvider>
-          <Box
-            sx={{ width: "100vw", height: "100vh", backgroundColor: "black" }}
-          >
-            <Headers />
-            {children}
-          </Box>
+          <FilterProvider>
+            <Box
+              sx={{ width: "100vw", height: "100vh", backgroundColor: "black" }}
+            >
+              <Headers />
+              {children}
+            </Box>
+          </FilterProvider>
         </PropertyProvider>
       </body>
     </html>
