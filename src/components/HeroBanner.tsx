@@ -10,7 +10,7 @@ const HeroBanner: NextPage = ({}) => {
           <h1 className="font-bold max-w-2xl mb-6 text-4xl leading-none md:text-5xl xl:text-6xl">
             Discover Your Dream Home in Srikakulam
           </h1>
-          <p className="max-w-2xl mb-10 font-light text-gray-200 lg:mb-8 md:text-lg lg:text-xl dark:text-gray-300">
+          <p className="max-w-2xl mb-10 font-light text-gray-200 lg:mb-8 md:text-lg lg:text-xl dark:text-gray-300 py-2">
             Explore our curated selection of premium properties to find the
             perfect home for you and your family in Srikakulam.
           </p>

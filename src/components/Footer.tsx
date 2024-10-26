@@ -1,14 +1,11 @@
-// components/Footer.tsx
-
 import React from "react";
 import { FaFacebook, FaInstagram, FaLinkedin } from "react-icons/fa";
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-gray-800 text-white py-6">
-      <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
-        {/* Left side with links and social media icons */}
-        <div className="flex flex-col mb-4 md:mb-0">
+    <footer className="bg-gray-800 text-white py-2">
+      <div className="max-w-6xl mx-auto px-2 flex flex-col md:flex-row justify-between items-center">
+        <div className="flex flex-col mb-2 md:mb-0">
           {/* Navigation Links */}
           <div className="flex flex-col md:flex-row mb-2">
             <a
@@ -66,9 +63,8 @@ const Footer: React.FC = () => {
           </div>
         </div>
 
-        {/* Right side with contact information */}
         <div className="text-center">
-          <div className="text-sm mb-2">
+          <div className="text-sm">
             Email:{" "}
             <a href="mailto:info@example.com" className="hover:underline">
               info@example.com

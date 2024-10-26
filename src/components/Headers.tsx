@@ -123,7 +123,7 @@ function Header() {
           sx={{
             color: "white",
             borderRadius: 1,
-            marginRight: 1,
+            marginRight: 2,
             "& .MuiInputBase-root": {
               color: "white",
             },
@@ -157,7 +157,7 @@ function Header() {
           }}
           sx={{
             color: "white",
-            marginRight: 1,
+            marginRight: 2,
             "& .MuiInputBase-root": {
               color: "white",
               borderRadius: 1,

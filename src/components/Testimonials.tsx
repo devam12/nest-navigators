@@ -18,63 +18,62 @@ const testimonialsData: Testimonial[] = [
     name: "John Doe",
     feedback: "This product has changed my life for the better!",
     designation: "CEO, Company A",
-    image: "/images/john.jpg", // Example image path
+    image: "/images/john.jpg",
   },
   {
     id: 2,
     name: "Jane Smith",
     feedback: "Excellent service and great support!",
     designation: "Manager, Company B",
-    image: "/images/jane.jpg", // Example image path
+    image: "/images/jane.jpg", 
   },
   {
     id: 3,
     name: "Mike Johnson",
     feedback: "Highly recommend this to everyone!",
     designation: "Developer, Company C",
-    image: "/images/mike.jpg", // Example image path
+    image: "/images/mike.jpg", 
   },
   {
     id: 4,
     name: "Alice Brown",
     feedback: "Fantastic experience with the team!",
     designation: "Designer, Company D",
-    image: "/images/alice.jpg", // Example image path
+    image: "/images/alice.jpg", 
   },
   {
     id: 5,
     name: "Chris Green",
     feedback: "A game changer for my business!",
     designation: "Entrepreneur, Company E",
-    image: "/images/chris.jpg", // Example image path
+    image: "/images/chris.jpg", 
   },
   {
     id: 6,
     name: "Emma Wilson",
     feedback: "Support was top-notch!",
     designation: "Product Manager, Company F",
-    image: "/images/emma.jpg", // Example image path
+    image: "/images/emma.jpg", 
   },
   {
     id: 7,
     name: "Tom White",
     feedback: "I can't imagine working without it!",
     designation: "CTO, Company G",
-    image: "/images/tom.jpg", // Example image path
+    image: "/images/tom.jpg", 
   },
   {
     id: 8,
     name: "Sophia Taylor",
     feedback: "Excellent value for the price!",
     designation: "Marketing Head, Company H",
-    image: "/images/sophia.jpg", // Example image path
+    image: "/images/sophia.jpg", 
   },
 ];
 
-// Testimonials component
 const Testimonials: React.FC = () => {
   return (
-    <div className="max-w-6xl mx-auto  bg-black rounded-lg shadow-md   border-gray-600 mb-6">
+    <div className="max-w-6xl mx-auto  bg-black rounded-lg shadow-md   border-gray-600 mb-6 my-2">
       <h2 className="text-2xl font-bold text-center text-white mb-6">
         What Our Clients Say
       </h2>
