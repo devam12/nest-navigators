@@ -1,6 +1,7 @@
 "use client"
 import AddPropertyModal from "@/components/AddPropertyModal";
 import HeroBanner from "@/components/HeroBanner";
+import Testimonials from "@/components/Testimonials";
 import { Box } from "@mui/material";
 import { NextPage } from "next";
 import { useState } from "react";
@@ -18,6 +19,7 @@ const Page: NextPage<Props> = ({}) => {
         onClose={() => setModalOpen(false)}
       /> */}
       <HeroBanner></HeroBanner>
+      <Testimonials/>
       <AddPropertyModal></AddPropertyModal>
     </>
   );

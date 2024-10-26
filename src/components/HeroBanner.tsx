@@ -7,10 +7,10 @@ const HeroBanner: NextPage = ({}) => {
     <section className="bg-cover bg-center bg-no-repeat bg-[url('/path-to-your-image.jpg')] ">
       <div className="bg-black/50 grid max-w-screen-xl px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12">
         <div className="mr-auto place-self-center lg:col-span-7 text-white">
-          <h1 className="font-bold max-w-2xl mb-4 text-4xl leading-none md:text-5xl xl:text-6xl">
+          <h1 className="font-bold max-w-2xl mb-10 text-4xl leading-none md:text-5xl xl:text-6xl">
             Discover Your Dream Home in Srikakulam
           </h1>
-          <p className="max-w-2xl mb-6 font-light text-gray-200 lg:mb-8 md:text-lg lg:text-xl dark:text-gray-300">
+          <p className="max-w-2xl mb-10 font-light text-gray-200 lg:mb-8 md:text-lg lg:text-xl dark:text-gray-300">
             Explore our curated selection of premium properties to find the
             perfect home for you and your family in Srikakulam.
           </p>
