@@ -72,7 +72,7 @@ const SignUpForm: FC = () => {
           lineHeight="36px"
           color="#101828"
         >
-          Log in to your account
+          Register to your account
         </Typography>
         <Typography
           sx={{ textAlign: "center" }}
