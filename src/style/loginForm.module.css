@@ -1,0 +1,94 @@
+.formWrapper {
+  display: flex;
+  flex-direction: column;
+  row-gap: 18px;
+  background-color: #ffffff;
+}
+
+.imageWrapper {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  row-gap: 18px;
+}
+
+.emptyIconContainer {
+  height: 48px;
+  width: 48px;
+}
+
+.iconContainer {
+  justify-content: center;
+  display: flex;
+  flex-direction: row;
+}
+
+.textContainer {
+  justify-content: center;
+  row-gap: 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.fieldsContainer {
+  row-gap: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.fieldsWithError {
+  row-gap: 5px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* login.module.css */
+
+.loginPage {
+  min-height: 100vh;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  overflow: auto;
+  background-color: #ffffff;
+}
+
+.headerContainer {
+  width: 100vw;
+  background-color: #ffffff;
+  position: absolute;
+}
+
+.mainContent {
+  display: flex;
+  flex: 1;
+  /* margin-top: -100px; */
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* overflow: hidden; */
+}
+
+@media (min-width: 900px) {
+  .mainContent {
+    flex-direction: row;
+  }
+}
+
+.topBar {
+  min-height: 12px;
+  width: 100vw;
+  background-color: #7f56d9;
+}
+
+.logoContainer {
+  flex: 1;
+  margin: 16px 0;
+}

@@ -1,6 +1,4 @@
 import { NextPage } from "next";
-import Image from "next/image";
-// import Image from "next/image";
 
 const HeroBanner: NextPage = ({}) => {
   return (

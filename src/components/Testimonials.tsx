@@ -1,17 +1,13 @@
-// components/Testimonials.tsx
-
 import React from "react";
 
-// Define the type for a testimonial
 interface Testimonial {
   id: number;
   name: string;
   feedback: string;
   designation: string;
-  image: string; // Add image property if you want to include images
+  image: string; 
 }
 
-// Sample data for testimonials
 const testimonialsData: Testimonial[] = [
   {
     id: 1,

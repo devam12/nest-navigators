@@ -35,7 +35,6 @@ export default function RootLayout({
             <Box
               sx={{ width: "100vw", height: "100vh", backgroundColor: "black" }}
             >
-              <Headers />
               {children}
             </Box>
           </FilterProvider>
