@@ -25,6 +25,10 @@ const SignUpForm: FC = () => {
     message: "",
   });
 
+  const navigateTo = (url: string) => {
+    router.push(url); // Navigate and close the menu
+  };
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [cpassword, setCPassword] = useState("");
@@ -195,6 +199,16 @@ const SignUpForm: FC = () => {
               />
             </Box>
           </Box>
+          <Typography
+            fontWeight={600}
+            fontSize={12}
+            lineHeight="18px"
+            color={COLORS.PRIMARY_LIGHT}
+            onClick={() => navigateTo("/login")}
+            sx={{ cursor: "pointer" }}
+          >
+            Login
+          </Typography>
         </Box>
         <ActionButton
           onClick={() => {}}

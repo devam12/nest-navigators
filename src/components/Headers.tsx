@@ -181,7 +181,13 @@ function Header() {
           List Your Property
         </a>
 
-        {/* User menu functionality commented out */}
+        <a
+          onClick={()=>navigateTo('/login')}
+          className="inline-flex items-center justify-center px-5 py-2 mr-3 text-base font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-primary-200 dark:focus:ring-primary-900"
+        >
+          Login
+        </a>
+
       </Toolbar>
     </AppBar>
   );

@@ -33,6 +33,10 @@ const LoginForm: FC = () => {
     event: React.MouseEvent<HTMLButtonElement>
   ) => event.preventDefault();
 
+  const navigateTo = (url: string) => {
+    router.push(url); // Navigate and close the menu
+  };
+
   const forgotPasswordHandler = () => {
     setShowModal(true);
   };
@@ -166,9 +170,19 @@ const LoginForm: FC = () => {
         <Box
           sx={{
             ...flexDisplay({ direction: "row" }),
-            justifyContent: "flex-end",
+            justifyContent: "space-between",
           }}
         >
+          <Typography
+            fontWeight={600}
+            fontSize={12}
+            lineHeight="18px"
+            color={COLORS.PRIMARY_LIGHT}
+            onClick={() => navigateTo("/signup")}
+            sx={{ cursor: "pointer" }}
+          >
+            Register
+          </Typography>
           <Typography
             fontWeight={600}
             fontSize={12}
