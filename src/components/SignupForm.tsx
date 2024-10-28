@@ -211,7 +211,7 @@ const SignUpForm: FC = () => {
           </Typography>
         </Box>
         <ActionButton
-          onClick={() => {}}
+          onClick={() => navigateTo("/home")}
           variant="contained"
           loading={loading}
           radius="8px"
